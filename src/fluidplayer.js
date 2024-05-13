@@ -154,6 +154,7 @@ const fluidPlayerClass = function () {
         self.fluidPseudoPause = false;
         self.mobileInfo = self.getMobileOs();
         self.events = {};
+        self.chapters = [];
         self.timeSkipOffsetAmount = 10;
 
         //Default options
@@ -310,6 +311,10 @@ const fluidPlayerClass = function () {
                 'Use module callbacks instead!')
         }
 
+        if (options.chapters) {
+            self.chapters = options.chapters;
+        }
+
         /**
          * Replaces values from objects without replacing the default object
          *
@@ -388,6 +393,7 @@ const fluidPlayerClass = function () {
 
         self.displayOptions.layoutControls.playerInitCallback();
 
+        self.createChaptersSwitch();
         self.createVideoSourceSwitch();
 
         self.createSubtitles();
@@ -846,6 +852,10 @@ const fluidPlayerClass = function () {
         controls.duration.className = 'fluid_control_duration fluid_fluid_control_duration';
         controls.duration.innerText = '00:00 / 00:00';
         controls.rightContainer.appendChild(controls.duration);
+
+        controls.chapters = document.createElement('div')
+        controls.chapters.className = 'fluid_button fluid_control_chapters fluid_button_chapters';
+        controls.rightContainer.appendChild(controls.chapters)
 
         return controls;
     };
@@ -2097,6 +2107,89 @@ const fluidPlayerClass = function () {
             //Probably the video ad file was not loaded successfully
             self.playMainVideoWhenVastFails(401);
         }
+    };
+
+    self.createChaptersSwitch = () => {
+        // const chapters = [
+        //     {
+        //         title: '1min',
+        //         offset: 60,
+        //     }
+        // ];
+        // [].forEach.call(chapters, source => {
+        //     if (source.title && source.src) {
+        //         chapters.push({
+        //             'title': source.title,
+        //             'url': source.src,
+        //             'isHD': (source.getAttribute('data-fluid-hd') != null)
+        //         });
+        //     }
+        // });
+
+        // self.chapters = chapters;
+        if (self.chapters.length <= 0) {
+            return;
+        }
+
+        const chapterChangeButton = self.domRef.wrapper.querySelector('.fluid_control_chapters');
+        chapterChangeButton.style.display = 'inline-block';
+
+        let appendChapterChange = false;
+
+        const chapterChangeList = document.createElement('div');
+        chapterChangeList.className = 'fluid_chapters_list';
+        chapterChangeList.style.display = 'none';
+
+        let firstSource = true;
+        for (const chapter of self.chapters) {
+            const hdElement = (chapter.isHD) ? '<sup style="color:' + self.displayOptions.layoutControls.primaryColor + '" class="fp_hd_source"></sup>' : '';
+            firstSource = false;
+            const chapterChangeDiv = document.createElement('div');
+            chapterChangeDiv.className = 'fluid_chapters_list_item js-source_' + chapter.title;
+            chapterChangeDiv.innerHTML = '<span class="chapter_button_icon"></span>' + chapter.title + hdElement;
+
+            chapterChangeDiv.addEventListener('click', function (event) {
+                event.stopPropagation();
+
+                self.domRef.player.currentTime = chapter.offset;
+
+                self.openCloseChaptersSwitch();
+            });
+
+            chapterChangeList.appendChild(chapterChangeDiv);
+            appendChapterChange = true;
+        }
+
+        if (appendChapterChange) {
+            chapterChangeButton.appendChild(chapterChangeList);
+            chapterChangeButton.addEventListener('click', () => {
+                self.openCloseChaptersSwitch();
+            });
+        } else {
+            // Didn't give any source options
+            self.domRef.wrapper.querySelector('.fluid_control_chapters').style.display = 'none';
+        }
+    };
+
+    self.openCloseChaptersSwitch = () => {
+        const sourceChangeList = self.domRef.wrapper.querySelector('.fluid_chapters_list');
+
+        if (self.isCurrentlyPlayingAd) {
+            sourceChangeList.style.display = 'none';
+            return;
+        }
+
+        if (sourceChangeList.style.display !== 'none') {
+            sourceChangeList.style.display = 'none';
+            return;
+        }
+
+        sourceChangeList.style.display = 'block';
+        const mouseOut = () => {
+            sourceChangeList.removeEventListener('mouseleave', mouseOut);
+            sourceChangeList.style.display = 'none';
+        };
+        sourceChangeList.addEventListener('mouseleave', mouseOut);
     };
 
     self.createVideoSourceSwitch = () => {
