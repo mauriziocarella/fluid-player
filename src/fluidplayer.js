@@ -2162,15 +2162,6 @@ const fluidPlayerClass = function () {
 
             chapterChangeList.appendChild(chapterChangeDiv);
             appendChapterChange = true;
-
-            const markersHolder = self.domRef.wrapper.querySelector('.fluid_controls_chapter_markers_holder');
-            const chapterMarker = document.createElement('div');
-            chapterMarker.className = 'fluid_controls_chapter_marker';
-            chapterMarker.style.left = (chapter.offset / self.mainVideoDuration * 100) + '%';
-            if (self.isCurrentlyPlayingAd) {
-                chapterMarker.style.display = 'none';
-            }
-            markersHolder.appendChild(chapterMarker);
         }
 
         if (appendChapterChange) {
@@ -2531,6 +2522,17 @@ const fluidPlayerClass = function () {
         self.mainVideoReadyState = true;
         self.domRef.player.dispatchEvent(event);
         self.domRef.player.removeEventListener('loadedmetadata', self.mainVideoReady);
+
+        for (const chapter of self.chapters) {
+            const markersHolder = self.domRef.wrapper.querySelector('.fluid_controls_chapter_markers_holder');
+            const chapterMarker = document.createElement('div');
+            chapterMarker.className = 'fluid_controls_chapter_marker';
+            chapterMarker.style.left = (chapter.offset / self.mainVideoDuration * 100) + '%';
+            if (self.isCurrentlyPlayingAd) {
+                chapterMarker.style.display = 'none';
+            }
+            markersHolder.appendChild(chapterMarker);
+        }
     };
 
     self.userActivityChecker = () => {
