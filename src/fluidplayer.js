@@ -857,6 +857,10 @@ const fluidPlayerClass = function () {
         controls.chapters.className = 'fluid_button fluid_control_chapters fluid_button_chapters';
         controls.rightContainer.appendChild(controls.chapters)
 
+        controls.chapterMarkers = document.createElement('div');
+        controls.chapterMarkers.className = 'fluid_controls_chapter_markers_holder';
+        controls.progressContainer.appendChild(controls.chapterMarkers);
+
         return controls;
     };
 
@@ -2158,6 +2162,15 @@ const fluidPlayerClass = function () {
 
             chapterChangeList.appendChild(chapterChangeDiv);
             appendChapterChange = true;
+
+            const markersHolder = self.domRef.wrapper.querySelector('.fluid_controls_chapter_markers_holder');
+            const chapterMarker = document.createElement('div');
+            chapterMarker.className = 'fluid_controls_chapter_marker';
+            chapterMarker.style.left = (chapter.offset / self.mainVideoDuration * 100) + '%';
+            if (self.isCurrentlyPlayingAd) {
+                chapterMarker.style.display = 'none';
+            }
+            markersHolder.appendChild(chapterMarker);
         }
 
         if (appendChapterChange) {
@@ -2169,6 +2182,7 @@ const fluidPlayerClass = function () {
             // Didn't give any source options
             self.domRef.wrapper.querySelector('.fluid_control_chapters').style.display = 'none';
         }
+
     };
 
     self.openCloseChaptersSwitch = () => {

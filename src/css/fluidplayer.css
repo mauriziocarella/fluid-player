@@ -771,7 +771,8 @@ _:-ms-lang(x),
 
 .fluid_video_wrapper.fluid_player_layout_default .fluid_controls_container .fluid_controls_progress_container:hover .fluid_controls_progress,
 .fluid_video_wrapper.fluid_player_layout_default .fluid_controls_container .fluid_controls_progress_container:hover .fluid_controls_buffered,
-.fluid_video_wrapper.fluid_player_layout_default .fluid_controls_container .fluid_controls_progress_container:hover .fluid_controls_ad_markers_holder {
+.fluid_video_wrapper.fluid_player_layout_default .fluid_controls_container .fluid_controls_progress_container:hover .fluid_controls_ad_markers_holder,
+.fluid_video_wrapper.fluid_player_layout_default .fluid_controls_container .fluid_controls_progress_container:hover .fluid_controls_chapter_markers_holder {
     margin-top: -1px;
     height: 5px;
 }
@@ -806,7 +807,8 @@ _:-ms-lang(x),
     transition: opacity 0.3s;
 }
 
-.fluid_video_wrapper.fluid_player_layout_default .fluid_controls_container .fluid_controls_ad_markers_holder {
+.fluid_video_wrapper.fluid_player_layout_default .fluid_controls_container .fluid_controls_ad_markers_holder,
+.fluid_video_wrapper.fluid_player_layout_default .fluid_controls_container .fluid_controls_chapter_markers_holder {
     position: absolute;
     top: 5px;
     width: 100%;
@@ -819,6 +821,12 @@ _:-ms-lang(x),
     background-color: #FFCC00;
     height: 100%;
     width: 6px;
+}
+.fluid_video_wrapper.fluid_player_layout_default .fluid_controls_container .fluid_controls_chapter_marker {
+    position: absolute;
+    background-color: #FFFFFF;
+    height: 100%;
+    width: 2px;
 }
 
 .fluid_video_wrapper.fluid_player_layout_default .fluid_controls_container .fluid_controls_right .fluid_control_volume_container {
