@@ -219,4 +219,8 @@ declare interface FluidPlayerOptions {
         fullscreen: string;
         exitFullscreen: string;
     }>;
+    chapters?: Array<{
+        title: string,
+        offset: number
+    }>
 }
